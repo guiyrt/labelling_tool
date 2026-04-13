@@ -1,0 +1,18 @@
+[project]
+name = "labelling-tool"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=3.0.2",
+    "pyarrow>=23.0.1",
+    "pyqt6>=6.11.0",
+]
+
+[project.gui-scripts]
+launch = "labelling_tool.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.9.6,<0.10.0"]
+build-backend = "uv_build"
