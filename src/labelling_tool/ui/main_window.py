@@ -96,5 +96,10 @@ class MainWindow(QMainWindow):
             (self.df["timestamp"] >= abs_time - window) &
             (self.df["timestamp"] <= abs_time + window)
         )
-        filtered = list(self.df.loc[mask, "callsign"].unique())
+        filtered = sorted(
+            callsign
+            for callsign in self.df.loc[mask, "callsign"].unique()
+            if not callsign.startswith("TrackNumber")
+        )
+
         self.side_panel.update_callsigns(callsigns=filtered)
