@@ -15,23 +15,6 @@ from PyQt6.QtGui import QPainter, QPen, QColor, QShortcut, QKeySequence
 
 from ..path_finder import get_video_filepath, get_video_metadata_filepath
 
-
-def ensure_seekable_video(original_path: Path) -> Path:
-    """Checks if an indexed version exists. If not, performs a lossless remux."""
-    indexed_path = original_path.with_name(f"{original_path.stem}_indexed.mkv")
-    if indexed_path.exists():
-        return indexed_path
-
-    print("\n[INFO] Original video lacks a seek index. Running a lossless remux to enable fast timeline scrubbing (~2s)...")
-    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-i", str(original_path), "-c", "copy", str(indexed_path)]
-    try:
-        subprocess.run(cmd, check=True)
-        return indexed_path
-    except subprocess.CalledProcessError:
-        print("[WARNING] FFmpeg remux failed. Seeking may remain broken.")
-        return original_path
-
-
 class GazeOverlayItem(QGraphicsItem):
     """A custom QGraphicsItem that draws the gaze vector graphics on top of the video."""
     def __init__(self, parent=None):
@@ -282,10 +265,7 @@ class VideoPlayer(QWidget):
         self.player.positionChanged.connect(self._on_position_changed)
 
     def load(self, session_path: Path):
-        orig_video = get_video_filepath(session_path)
-        seekable_video = ensure_seekable_video(orig_video)
-        
-        self.player.setSource(QUrl.fromLocalFile(str(seekable_video)))
+        self.player.setSource(QUrl.fromLocalFile(str(get_video_filepath(session_path))))
         self._extract_metadata(get_video_metadata_filepath(session_path))
 
     def load_gaze_data(self, df: pd.DataFrame):
@@ -461,7 +441,7 @@ class VideoPlayer(QWidget):
                 gx = float(gx_val)
                 gy = float(gy_val)
             else:
-                status_text = "GAZE: SENSOR BLINK (NaN)"
+                status_text = "GAZE: X:---- Y:----"
 
         if valid:
             if self.alpha == 0.0:
