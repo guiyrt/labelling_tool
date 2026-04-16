@@ -10,7 +10,7 @@ def get_video_metadata_filepath(session_path: Path):
 
 def get_parquet_filepath(session_path: Path):
     session_id = session_path.name
-    return session_path / "asd_events" / f"{session_id}_track_screen_position.parquet"
+    return session_path / "asdEvents" / f"{session_id}_track_screen_position.parquet"
 
 def get_gaze_parquet_filepath(session_path: Path):
     session_id = session_path.name

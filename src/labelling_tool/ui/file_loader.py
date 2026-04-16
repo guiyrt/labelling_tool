@@ -29,7 +29,7 @@ class FileControls(QWidget):
             return  
 
         session_dir = Path(folder_path)
-        asd_dir = session_dir / "asd_events"
+        asd_dir = session_dir / "asdEvents"
         vid_dir = session_dir / "videoRecordings"
         et_dir = session_dir / "ET"
 

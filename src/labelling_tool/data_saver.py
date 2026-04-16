@@ -34,7 +34,7 @@ class DataSaver:
         return task
 
     def initialize_output_file(self, session_dir: Path):
-        self.output_file_path = session_dir / "simulator" / f"{session_dir.name}_task_labelled.json"
+        self.output_file_path = session_dir / "taskRecognition" / f"{session_dir.name}_task_labelled.json"
 
         if os.path.exists(self.output_file_path):
             with open(self.output_file_path, "r", encoding="utf-8") as f:
